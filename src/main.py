@@ -12,11 +12,12 @@ matplotlib.style.use('ggplot')
 import utils, data_helper, analysis
 
 def main():
-    if(len(sys.argv) < 2):
-        print "Usage: main.py <inputfile>"
+    if(len(sys.argv) < 3):
+        print "Usage: main.py <inputfile> <outputfile>"
         sys.exit()
 
     inputFileName = sys.argv[1]
+    outputFileName = sys.argv[2]
 
     utils.log_config()
     logger = logging.getLogger(__name__)
@@ -37,6 +38,9 @@ def main():
     logger.info("N of applications = {}".format(len(apps)))
 
     print(apps)
+
+    apps.to_csv(outputFileName, sep=';', encoding='utf-8')
+    print("Succesfully wrote {} apps to file {}".format(len(apps), outputFileName))
 
 
 if __name__ == "__main__":
