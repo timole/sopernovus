@@ -36,7 +36,10 @@ def summarize_applications(df):
     return summary
 
 def parse_application_summary(applicationId, events):
-    n_events = len(events)
-
     return {  "applicationId": applicationId, 
-              "nEvents": n_events }
+              "events": len(events),
+              "comments": len(find_events_by_action(events, 'add-comment')) }
+
+def find_events_by_action(events, action):
+    return events[events['action'] == action]
+
