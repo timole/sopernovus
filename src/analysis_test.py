@@ -19,5 +19,8 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 4)
         self.assertEqual(apps[apps['applicationId'] == 101]['comments'].item(), 0)
 
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments-applicant'].item(), 2)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments-authority'].item(), 2)
+
 if __name__ == '__main__':
     unittest.main()

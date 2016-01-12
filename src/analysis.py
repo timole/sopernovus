@@ -29,17 +29,27 @@ def summarize_applications(df):
         prevApplicationId = applicationId
         i = i + 1
 
-        if i % 100000 == 0:
-            logger.info("Processed {}/{} rows".format(i, len(df)))
+        show_progress_bar(i, len(df))
 
     summary = summary.append(parse_application_summary(prevApplicationId, df[startIndex:i]), ignore_index = True)
     return summary
 
 def parse_application_summary(applicationId, events):
-    return {  "applicationId": applicationId, 
-              "events": len(events),
-              "comments": len(find_events_by_action(events, 'add-comment')) }
+    return {    "applicationId": applicationId, 
+                "events": len(events),
+                "comments": len(find_events_by_action(events, 'add-comment')),
+                "comments-applicant": len(find_events_by_action_and_role(events, 'add-comment', 'applicant')),
+                "comments-authority": len(find_events_by_action_and_role(events, 'add-comment', 'authority'))}
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
 
+def find_events_by_action_and_role(events, action, role):
+    # TODO: one liner would be better, but & is not supported
+    result = events[events['action'] == action]
+    result = result[result['role'] == role]
+    return result
+
+def show_progress_bar(index, maxIndex):
+    if index % 100000 == 0:
+        logger.info("Processed {}/{} rows".format(index, maxIndex))
