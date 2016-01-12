@@ -16,7 +16,7 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_comments(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 3)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 4)
         self.assertEqual(apps[apps['applicationId'] == 101]['comments'].item(), 0)
 
 if __name__ == '__main__':
