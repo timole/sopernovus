@@ -1,3 +1,4 @@
+import sys, math
 import pandas as pd
 import logging
 
@@ -21,17 +22,20 @@ def summarize_applications(df):
     for index, row in iterator:
         applicationId = row['applicationId']
 
-        if applicationId != prevApplicationId and prevApplicationId is not None:
-            app = parse_application_summary(prevApplicationId, df[startIndex:i])
-            summary = summary.append(app, ignore_index = True)
+        if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
+            if not math.isnan(prevApplicationId):
+                logger.debug("Handle events for application {}".format(applicationId))
+
+                app = parse_application_summary(prevApplicationId, df[startIndex:i])
+                summary = summary.append(app, ignore_index = True)
             startIndex = i
 
         prevApplicationId = applicationId
+
         i = i + 1
 
         show_progress_bar(i, len(df))
 
-    summary = summary.append(parse_application_summary(prevApplicationId, df[startIndex:i]), ignore_index = True)
     return summary
 
 def parse_application_summary(applicationId, events):
@@ -51,5 +55,5 @@ def find_events_by_action_and_role(events, action, role):
     return result
 
 def show_progress_bar(index, maxIndex):
-    if index % 100000 == 0:
+    if index % 1000 == 0:
         logger.info("Processed {}/{} rows".format(index, maxIndex))

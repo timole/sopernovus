@@ -3,7 +3,7 @@ import unittest
 import data_helper
 import analysis
 
-_TEST_DATA_FILE = "lupapiste-usage-test.tsv"
+_TEST_DATA_FILE = "lupapiste-usage-test.csv"
 
 class TestApplicationSummary(unittest.TestCase):
 
@@ -13,6 +13,9 @@ class TestApplicationSummary(unittest.TestCase):
         self.apps = analysis.summarize_applications(self.df)
         print self.apps
 
+    def test_number_of_applications(self):
+        self.assertEqual(len(self.apps), 3)
+
     def test_number_of_comments(self):
         apps = self.apps
 
@@ -21,6 +24,7 @@ class TestApplicationSummary(unittest.TestCase):
 
         self.assertEqual(apps[apps['applicationId'] == 100]['comments-applicant'].item(), 2)
         self.assertEqual(apps[apps['applicationId'] == 100]['comments-authority'].item(), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
