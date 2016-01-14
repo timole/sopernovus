@@ -10,7 +10,7 @@ import matplotlib
 matplotlib.style.use('ggplot')
 
 import utils, data_helper, analysis
-TESTI
+
 def main():
     if(len(sys.argv) < 2):
         print "Usage: main.py <inputfile> <outputfile>"
