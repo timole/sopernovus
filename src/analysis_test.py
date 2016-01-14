@@ -19,12 +19,18 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_comments(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 4)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 7)
         self.assertEqual(apps[apps['applicationId'] == 101]['comments'].item(), 0)
 
-        self.assertEqual(apps[apps['applicationId'] == 100]['comments-applicant'].item(), 2)
-        self.assertEqual(apps[apps['applicationId'] == 100]['comments-authority'].item(), 2)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments-applicant'].item(), 7)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments-authority'].item(), 0)
 
+    def test_count_session_length_by_role(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 101]['session-length'].item(), 6)
+        self.assertEqual(apps[apps['applicationId'] == 101]['session-length-applicant'].item(), 6)
+        self.assertEqual(apps[apps['applicationId'] == 101]['session-length-authority'].item(), 0)
 
 if __name__ == '__main__':
     unittest.main()

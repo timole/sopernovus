@@ -1,8 +1,11 @@
-import sys, math
+import sys, math, pdb
+from datetime import timedelta
 import pandas as pd
 import logging
 
 logger = logging.getLogger(__name__)
+
+SESSION_THRESHOLD_IN_MINUTES = 15
 
 def summarize_applications(df):
     """ Create a summary of the applications as a table. Presumes events are in datetime order
@@ -43,7 +46,10 @@ def parse_application_summary(applicationId, events):
                 "events": len(events),
                 "comments": len(find_events_by_action(events, 'add-comment')),
                 "comments-applicant": len(find_events_by_action_and_role(events, 'add-comment', 'applicant')),
-                "comments-authority": len(find_events_by_action_and_role(events, 'add-comment', 'authority'))}
+                "comments-authority": len(find_events_by_action_and_role(events, 'add-comment', 'authority')),
+                "session-length": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
+                "session-length-applicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
+                "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES)}
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
@@ -57,3 +63,29 @@ def find_events_by_action_and_role(events, action, role):
 def show_progress_bar(index, maxIndex):
     if index % 1000 == 0:
         logger.info("Processed {}/{} rows".format(index, maxIndex))
+
+def count_session_length(events, thresholdMinutes):
+    delta = timedelta(minutes = thresholdMinutes)
+
+    timestamps = events['datetime']
+
+    if(len(timestamps) == 0):
+        return 0
+
+    prev = prev = timestamps.iloc[0]
+    i = 1
+    totalSession = 0
+    while i < len(timestamps):
+        diff = timestamps.iloc[i] - prev
+        prev = timestamps.iloc[i]
+        if(diff < delta):
+            totalSession = totalSession + diff.total_seconds()
+        else:
+            totalSession = totalSession + 120
+
+        i = i + 1
+
+    return round(totalSession / 60, 0)
+
+def count_session_length_by_role(events, role, thresholdMinutes):
+    return count_session_length(events[events['role'] == role], thresholdMinutes)
