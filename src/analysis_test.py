@@ -11,7 +11,6 @@ class TestApplicationSummary(unittest.TestCase):
         #TODO relative path to something better?
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
         self.apps = analysis.summarize_applications(self.df)
-        print self.apps
 
     def test_number_of_applications(self):
         self.assertEqual(len(self.apps), 3)
