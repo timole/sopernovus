@@ -1,0 +1,4 @@
+
+
+- koko data mukaan, myös queryt, jolloin näkee, milloin hakija on vain käynyt hakemuksella katsomassa, että josko viranomainen olisi vastannut
+
