@@ -88,7 +88,7 @@ def count_session_length(events, thresholdMinutes):
 
         i = i + 1
         
-    return 0
+    return round(totalSession / 60, 0)
 
 def count_session_length_by_role(events, role, thresholdMinutes):
     return count_session_length(events[events['role'] == role], thresholdMinutes)
