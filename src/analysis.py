@@ -51,7 +51,8 @@ def parse_application_summary(applicationId, events):
                 "session-length-applicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
                 "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
                 "is-submitted": len(find_events_by_action(events, 'submit-application')) > 0,
-                "has-verdict": len(find_events_by_action(events, 'give-verdict')) > 0 }
+                "has-verdict": len(find_events_by_action(events, 'give-verdict')) > 0,
+                "lead-time-from-submission-to-verdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
@@ -91,3 +92,15 @@ def count_session_length(events, thresholdMinutes):
 
 def count_session_length_by_role(events, role, thresholdMinutes):
     return count_session_length(events[events['role'] == role], thresholdMinutes)
+
+def count_days_between_events(events, fromEvent, tillEvent):
+    e1 = find_events_by_action(events, fromEvent)
+    e2 = find_events_by_action(events, tillEvent)
+
+    if(len(e1) > 0 and len(e2) > 0):
+        firstSubmission = e1.iloc(0)
+        verdictGiven = e2.iloc(0)        
+        timeBetween = e2['datetime'].iloc[0] - e1['datetime'].iloc[0]
+        return timeBetween.days
+    else:
+        return None
