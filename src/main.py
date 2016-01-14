@@ -43,7 +43,9 @@ def main():
 
     if outputFileName is not None:
         apps.to_csv(outputFileName, sep=';', encoding='utf-8')
-
+    else:
+        print apps
+        
     print("Succesfully parsed {} apps".format(len(apps)))
 
 if __name__ == "__main__":

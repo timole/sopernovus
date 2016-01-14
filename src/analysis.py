@@ -49,7 +49,9 @@ def parse_application_summary(applicationId, events):
                 "comments-authority": len(find_events_by_action_and_role(events, 'add-comment', 'authority')),
                 "session-length": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
                 "session-length-applicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
-                "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES)}
+                "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
+                "is-submitted": len(find_events_by_action(events, 'submit-application')) > 0,
+                "has-verdict": len(find_events_by_action(events, 'give-verdict')) > 0 }
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
