@@ -19,6 +19,13 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_applications(self):
         self.assertEqual(len(self.apps), 3)
 
+    def test_number_of_events(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 100]['events'].item(), 129)
+        self.assertEqual(apps[apps['applicationId'] == 102]['events'].item(), 5)
+
+
     def test_number_of_comments(self):
         apps = self.apps
 
