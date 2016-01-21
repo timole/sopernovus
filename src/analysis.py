@@ -29,7 +29,12 @@ def summarize_applications(df):
             if not math.isnan(prevApplicationId):
                 logger.debug("Handle events for application {}".format(applicationId))
 
-                app = parse_application_summary(prevApplicationId, df[startIndex:i])
+                if i == len(df) - 1:
+                    to = i + 1
+                else:
+                    to = i
+
+                app = parse_application_summary(prevApplicationId, df[startIndex:to])
                 summary = summary.append(app, ignore_index = True)
             startIndex = i
 
