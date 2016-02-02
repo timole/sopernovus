@@ -49,9 +49,9 @@ def summarize_applications(df):
 def parse_application_summary(applicationId, events):
     return {    "applicationId": applicationId, 
                 "events": len(events),
-                "comments": len(find_events_by_action(events, 'add-comment')),
-                "comments-applicant": len(find_events_by_action_and_role(events, 'add-comment', 'applicant')),
-                "comments-authority": len(find_events_by_action_and_role(events, 'add-comment', 'authority')),
+                "comments": len(find_events_by_action_and_target(events, 'add-comment', 'application')),
+                "comments-applicant": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'applicant', 'application')),
+                "comments-authority": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'authority', 'application')),
                 "session-length": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
                 "session-length-applicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
                 "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
@@ -64,10 +64,22 @@ def parse_application_summary(applicationId, events):
 def find_events_by_action(events, action):
     return events[events['action'] == action]
 
+def find_events_by_action_and_target(events, action, target):
+    result = events[events['action'] == action]
+    result = events[events['target'] == target]
+    return result
+
 def find_events_by_action_and_role(events, action, role):
     # TODO: one liner would be better, but & is not supported
     result = events[events['action'] == action]
     result = result[result['role'] == role]
+    return result
+
+def find_events_by_action_and_role_and_target(events, action, role, target):
+    # TODO: one liner would be better, but & is not supported
+    result = find_events_by_action_and_role(events, action, role)
+    result = result[result['role'] == role]
+    result = result[result['target'] == target]
     return result
 
 def show_progress_bar(index, maxIndex):

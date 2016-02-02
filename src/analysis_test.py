@@ -29,11 +29,16 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_comments(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 7)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments'].item(), 0)
         self.assertEqual(apps[apps['applicationId'] == 101]['comments'].item(), 0)
+        self.assertEqual(apps[apps['applicationId'] == 102]['comments'].item(), 4)
 
-        self.assertEqual(apps[apps['applicationId'] == 100]['comments-applicant'].item(), 7)
+        self.assertEqual(apps[apps['applicationId'] == 100]['comments-applicant'].item(), 0)
         self.assertEqual(apps[apps['applicationId'] == 100]['comments-authority'].item(), 0)
+        
+        self.assertEqual(apps[apps['applicationId'] == 102]['comments-applicant'].item(), 1)
+        self.assertEqual(apps[apps['applicationId'] == 102]['comments-authority'].item(), 3)
+
 
     def test_count_session_length_by_role(self):
         apps = self.apps
