@@ -38,8 +38,8 @@ class TestApplicationSummary(unittest.TestCase):
     def test_count_session_length_by_role(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 101]['session-length'].item(), 6)
-        self.assertEqual(apps[apps['applicationId'] == 101]['session-length-applicant'].item(), 6)
+        self.assertEqual(apps[apps['applicationId'] == 101]['session-length'].item(), 11)
+        self.assertEqual(apps[apps['applicationId'] == 101]['session-length-applicant'].item(), 11)
         self.assertEqual(apps[apps['applicationId'] == 101]['session-length-authority'].item(), 0)
 
     def test_is_submitted(self):

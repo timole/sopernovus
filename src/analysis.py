@@ -88,8 +88,6 @@ def count_session_length(events, thresholdMinutes):
         prev = timestamps.iloc[i]
         if(diff < delta):
             totalSession = totalSession + diff.total_seconds()
-        else:
-            totalSession = totalSession + 120
 
         i = i + 1
         
