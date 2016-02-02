@@ -57,6 +57,8 @@ def parse_application_summary(applicationId, events):
                 "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
                 "is-submitted": len(find_events_by_action(events, 'submit-application')) > 0,
                 "has-verdict": len(find_events_by_action(events, 'give-verdict')) > 0,
+                "is-cancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
+                                len(find_events_by_action(events, 'cancel-application-authority')) > 0,
                 "lead-time-from-submission-to-verdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
 
 def find_events_by_action(events, action):

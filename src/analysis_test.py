@@ -17,7 +17,7 @@ class TestApplicationSummary(unittest.TestCase):
         print self.apps
 
     def test_number_of_applications(self):
-        self.assertEqual(len(self.apps), 3)
+        self.assertEqual(len(self.apps), 5)
 
     def test_number_of_events(self):
         apps = self.apps
@@ -47,6 +47,13 @@ class TestApplicationSummary(unittest.TestCase):
 
         self.assertEqual(apps[apps['applicationId'] == 100]['is-submitted'].item(), True)
         self.assertEqual(apps[apps['applicationId'] == 101]['is-submitted'].item(), False)
+
+    def test_is_cancelled(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 102]['is-cancelled'].item(), False)
+        self.assertEqual(apps[apps['applicationId'] == 103]['is-cancelled'].item(), True)
+        self.assertEqual(apps[apps['applicationId'] == 104]['is-cancelled'].item(), True)
 
     def test_has_verdict(self):
         apps = self.apps
