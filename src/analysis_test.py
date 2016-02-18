@@ -39,6 +39,10 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 102]['comments-applicant'].item(), 1)
         self.assertEqual(apps[apps['applicationId'] == 102]['comments-authority'].item(), 3)
 
+    def test_number_of_update_docs(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 101]['update-doc'].item(), 7)
 
     def test_count_session_length_by_role(self):
         apps = self.apps
