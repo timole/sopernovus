@@ -5,10 +5,15 @@
 *We analyze usage data*
 
 
-**To run the analyzator:**
+###Running the analyzator:###
 
-`python src/main.py --input-file input-CSV-file --output-file output-CSV-file`
+CSV input file is a mandatory parameter:
 
-**To run the tests:**
+`python src/main.py --input-file INPUT_FILE --output-file OUTPUT_FILE`
+
+
+###Testing:###
 
 `python src/analysis_test.py`
+
+CI is at https://circleci.com/gh/timole/sopernovus
