@@ -50,17 +50,17 @@ def parse_application_summary(applicationId, events):
     return {    "applicationId": applicationId, 
                 "events": len(events),
                 "comments": len(find_events_by_action_and_target(events, 'add-comment', 'application')),
-                "comments-applicant": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'applicant', 'application')),
-                "comments-authority": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'authority', 'application')),
-                "session-length": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
-                "session-length-applicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
-                "session-length-authority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
-                "update-doc": len(find_events_by_action(events, 'update-doc')),
-                "is-submitted": len(find_events_by_action(events, 'submit-application')) > 0,
-                "has-verdict": len(find_events_by_action(events, 'give-verdict')) > 0,
-                "is-cancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
+                "commentsApplicant": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'applicant', 'application')),
+                "commentsAuthority": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'authority', 'application')),
+                "sessionLength": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
+                "sessionLengthApplicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
+                "sessionLengthAuthority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
+                "updateDocs": len(find_events_by_action(events, 'update-doc')),
+                "isSubmitted": len(find_events_by_action(events, 'submit-application')) > 0,
+                "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
+                "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
                                 len(find_events_by_action(events, 'cancel-application-authority')) > 0,
-                "lead-time-from-submission-to-verdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
+                "leadTimeFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
