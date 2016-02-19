@@ -45,7 +45,7 @@ def summarize_applications(df):
         show_progress_bar(i, len(df))
 
     return summary
-#Tämä on testi
+
 def parse_application_summary(applicationId, events):
     return {    "applicationId": applicationId, 
                 "events": len(events),
