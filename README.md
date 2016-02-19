@@ -7,7 +7,7 @@
 
 **To run the analyzator:**
 
-`python src\main.py '&lt;'input file'&gt;' '&lt;'output file'&gt;'`
+`python src\main.py `&lt;`input file`&gt;` `&lt;`output file`&gt;``
 
 **To run the tests:**
 
