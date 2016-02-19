@@ -6,7 +6,9 @@
 
 
 **To run the analyzator:**
+
 `python src/main.py input-CSV-file  output-CSV-file`
 
 **To run the tests:**
+
 `python src/analysis_test.py`
