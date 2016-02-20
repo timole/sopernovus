@@ -21,8 +21,8 @@ class TestApplicationSummary(unittest.TestCase):
 
     def test_operation_type(self):
         apps = self.apps
-        self.assertEqual(apps[apps['_applicationId'] == 100]['_operationId'].item(), "pientalo")
-        self.assertEqual(apps[apps['_applicationId'] == 103]['_operationId'].item(), "puun-kaataminen")
+        self.assertEqual(apps[apps['_applicationId'] == 100]['_operationId'].item(), "asuinrakennus")
+        self.assertEqual(apps[apps['_applicationId'] == 103]['_operationId'].item(), "muu-maisema-toimenpide")
 
     def test_number_of_events(self):
         apps = self.apps

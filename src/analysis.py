@@ -25,7 +25,6 @@ def summarize_applications(df):
     for index, row in iterator:
         applicationId = row['applicationId']
         municipalityId = row['municipalityId']
-        operation = row['operation']
 
         if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
             if not math.isnan(prevApplicationId):
@@ -36,11 +35,12 @@ def summarize_applications(df):
                 else:
                     to = i
 
-                app = parse_application_summary(prevApplicationId, operation, municipalityId, df[startIndex:to])
+                app = parse_application_summary(prevApplicationId, prevOperationId, municipalityId, df[startIndex:to])
                 summary = summary.append(app, ignore_index = True)
             startIndex = i
 
         prevApplicationId = applicationId
+        prevOperationId = row['operation']
 
         i = i + 1
 
