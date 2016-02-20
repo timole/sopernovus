@@ -14,8 +14,8 @@ import utils, data_helper, analysis
 
 def parse_args():
     parser = argparse.ArgumentParser(description='SOPERNOVUS analysator')
-    parser.add_argument('--input-file', help='Input CSV file', required=True)
-    parser.add_argument('--output-file', help='Output CSV file', required=False, default = None)
+    parser.add_argument('-i', '--input-file', help='Input CSV file', required=True)
+    parser.add_argument('-o', '--output-file', help='Output CSV file', required=False, default = None)
     args = vars(parser.parse_args())
     return args
 
