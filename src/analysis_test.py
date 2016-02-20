@@ -19,6 +19,11 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_applications(self):
         self.assertEqual(len(self.apps), 5)
 
+    def test_operation_type(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['_applicationId'] == 100]['_operationId'].item(), "pientalo")
+        self.assertEqual(apps[apps['_applicationId'] == 103]['_operationId'].item(), "puun-kaataminen")
+
     def test_number_of_events(self):
         apps = self.apps
 
