@@ -7,7 +7,7 @@ import argparse
 import numpy as np, pandas as pd
 
 import matplotlib.pyplot as plt
-import matplotlib
+import matplotlib, datetime
 matplotlib.style.use('ggplot')
 
 import utils, data_helper, analysis
@@ -28,6 +28,8 @@ def main():
     logger = logging.getLogger(__name__)
 
     logger.info("Data file: {}".format(inputFileName))
+
+    startTime = datetime.datetime.now()
 
     # exported to global scope for debugging purposes
     global df
@@ -50,7 +52,9 @@ def main():
         print apps
         
     print("Succesfully parsed {} apps".format(len(apps)))
-
+    endTime = datetime.datetime.now()
+    elapsedTime = endTime - startTime
+    print("Analysis took {} minutes:".format(round(elapsedTime.total_seconds() / 60, 1)))
 
 if __name__ == "__main__":
     main()
