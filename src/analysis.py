@@ -64,7 +64,7 @@ def parse_application_summary(applicationId, operation, municipalityId, events):
                 "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
                 "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
                                 len(find_events_by_action(events, 'cancel-application-authority')) > 0,
-                "leadTimeFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
+                "daysFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]

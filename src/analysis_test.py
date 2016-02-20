@@ -75,6 +75,11 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['_applicationId'] == 100]['hasVerdict'].item(), True)
         self.assertEqual(apps[apps['_applicationId'] == 101]['hasVerdict'].item(), False)
 
+    def test_days_from_submission_to_verdict(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['_applicationId'] == 100]['daysFromSubmissionToVerdict'].item(), 31)
+        self.assertEqual(apps[apps['_applicationId'] == 101]['daysFromSubmissionToVerdict'].item(), None)
 
 if __name__ == '__main__':
     unittest.main()
