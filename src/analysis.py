@@ -25,7 +25,7 @@ def summarize_applications(df):
     for index, row in iterator:
         applicationId = row['applicationId']
         municipalityId = row['municipalityId']
-
+	
         if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
             if not math.isnan(prevApplicationId):
                 logger.debug("Handle events for application {}".format(applicationId))
@@ -53,18 +53,26 @@ def parse_application_summary(applicationId, operation, municipalityId, events):
                 "_municipalityId": municipalityId,
                 "_operationId": operation,
                 "events": len(events),
+				"userIds": find_unique_users_by_application(events),
                 "comments": len(find_events_by_action_and_target(events, 'add-comment', 'application')),
                 "commentsApplicant": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'applicant', 'application')),
                 "commentsAuthority": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'authority', 'application')),
+                "invitesAuthority" : len(find_events_by_action_and_role(events,'invite-with-role','authority')),
+                "invitesApplicant": len(find_events_by_action_and_role(events,'invite-with-role','applicant')),
                 "sessionLength": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
                 "sessionLengthApplicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
                 "sessionLengthAuthority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
                 "updateDocs": len(find_events_by_action(events, 'update-doc')),
+                "createDocs": len(find_events_by_action(events, 'create-doc')),
                 "isSubmitted": len(find_events_by_action(events, 'submit-application')) > 0,
                 "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
                 "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
                                 len(find_events_by_action(events, 'cancel-application-authority')) > 0,
                 "daysFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
+
+
+def find_unique_users_by_application(events):
+	return events.userId.nunique()
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
