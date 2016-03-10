@@ -19,6 +19,12 @@ def parse_args():
     args = vars(parser.parse_args())
     return args
 
+def print_stats(startTime):
+    print("Succesfully parsed {} apps".format(len(appsSummary)))
+    endTime = datetime.datetime.now()
+    elapsedTime = endTime - startTime
+    print("Analysis took {} minutes:".format(round(elapsedTime.total_seconds() / 60, 1)))
+
 def main():
     args = parse_args()
     inputFileName = args['input_file']
@@ -48,11 +54,8 @@ def main():
         appsSummary.to_csv(outputFileName, sep=';', encoding='utf-8')
     else:
         print appsSummary
-        
-    print("Succesfully parsed {} apps".format(len(appsSummary)))
-    endTime = datetime.datetime.now()
-    elapsedTime = endTime - startTime
-    print("Analysis took {} minutes:".format(round(elapsedTime.total_seconds() / 60, 1)))
+
+    print_stats(startTime)
 
 if __name__ == "__main__":
     main()
