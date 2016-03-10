@@ -9,7 +9,6 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 import matplotlib, datetime
-#matplotlib.style.use('ggplot')
 
 import utils, data_helper, analysis
 
@@ -34,25 +33,23 @@ def main():
 
     # exported to global scope for debugging purposes
     global df
-
     df = data_helper.import_data(inputFileName)
 
     logger.info("N of events: {}, from {} to {} ".format(len(df), df['datetime'].min(), df['datetime'].max()))
 
     # exported to global scope for debugging purposes
-    global apps
-    apps =  analysis.summarize_applications(df)
+    global appsSummary
+    appsSummary =  analysis.summarize_applications(df)
 
-    logger.info("N of applications = {}".format(len(apps)))
-
-    print(apps)
+    logger.info("N of applications = {}".format(len(appsSummary)))
+    print(appsSummary)
 
     if outputFileName is not None:
-        apps.to_csv(outputFileName, sep=';', encoding='utf-8')
+        appsSummary.to_csv(outputFileName, sep=';', encoding='utf-8')
     else:
-        print apps
+        print appsSummary
         
-    print("Succesfully parsed {} apps".format(len(apps)))
+    print("Succesfully parsed {} apps".format(len(appsSummary)))
     endTime = datetime.datetime.now()
     elapsedTime = endTime - startTime
     print("Analysis took {} minutes:".format(round(elapsedTime.total_seconds() / 60, 1)))
