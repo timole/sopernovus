@@ -27,7 +27,7 @@ def summarize_applications(df):
         municipalityId = row['municipalityId']
 	
         if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
-            if not math.isnan(prevApplicationId):
+            if prevApplicationId is not None:
                 logger.debug("Handle events for application {}".format(applicationId))
 
                 if i == len(df) - 1:
