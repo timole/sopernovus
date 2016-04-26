@@ -4,7 +4,6 @@
 
 *We analyze usage data*
 
-
 ###Running the analyzator:###
 
 CSV input file is a mandatory parameter:
