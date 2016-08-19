@@ -16,16 +16,18 @@ def summarize_applications(df):
     startIndex = 0
     i = 0
 
-    summary = pd.DataFrame()
+    summary = None
 
     df = df.sort(['applicationId', 'datetime'])
+
+    numberOfApplications = df["applicationId"].nunique()
 
     logger.info("Analyzing events")
     iterator = df.iterrows()
     for index, row in iterator:
         applicationId = row['applicationId']
         municipalityId = row['municipalityId']
-	
+
         if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
             if prevApplicationId is not None:
                 logger.debug("Handle events for application {}".format(applicationId))
@@ -36,7 +38,10 @@ def summarize_applications(df):
                     to = i
 
                 app = parse_application_summary(prevApplicationId, prevOperationId, municipalityId, df[startIndex:to])
-                summary = summary.append(app, ignore_index = True)
+                if summary is None:
+                    summary = pd.DataFrame(app, index = [0])
+                else:
+                    summary.loc[len(summary)] = app
             startIndex = i
 
         prevApplicationId = applicationId

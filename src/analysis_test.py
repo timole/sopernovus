@@ -2,18 +2,20 @@ import unittest
 
 import data_helper
 import analysis
+import pdb
 
 _TEST_DATA_FILE = "lupapiste-usage-test.csv"
 
 class TestApplicationSummary(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         #TODO relative path to something better?
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
         self.apps = analysis.summarize_applications(self.df)
 
         # print apps once for debugging
-        print "####################################################################"
+        print "Application summary based on test data:"
         print self.apps
 
     def test_number_of_applications(self):
