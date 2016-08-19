@@ -26,6 +26,10 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['_applicationId'] == 'LP-100']['_operationId'].item(), "asuinrakennus")
         self.assertEqual(apps[apps['_applicationId'] == 'LP-103']['_operationId'].item(), "muu-maisema-toimenpide")
 
+    def test_municipality(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['_applicationId'] == 'LP-100']['_municipalityId'].item(), 1056)
+
     def test_number_of_events(self):
         apps = self.apps
 

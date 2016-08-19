@@ -26,7 +26,6 @@ def summarize_applications(df):
     iterator = df.iterrows()
     for index, row in iterator:
         applicationId = row['applicationId']
-        municipalityId = row['municipalityId']
 
         if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
             if prevApplicationId is not None:
@@ -37,7 +36,7 @@ def summarize_applications(df):
                 else:
                     to = i
 
-                app = parse_application_summary(prevApplicationId, prevOperationId, municipalityId, df[startIndex:to])
+                app = parse_application_summary(prevApplicationId, prevOperationId, prevMunicipalityId, df[startIndex:to])
                 if summary is None:
                     summary = pd.DataFrame(app, index = [0])
                 else:
@@ -46,6 +45,7 @@ def summarize_applications(df):
 
         prevApplicationId = applicationId
         prevOperationId = row['operation']
+        prevMunicipalityId = row['municipalityId']
 
         i = i + 1
 
