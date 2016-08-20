@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 SESSION_THRESHOLD_IN_MINUTES = 15
 
-def summarize_applications(df):
+def summarize_applications(df, odf):
     """ Create a summary of the applications as a table. Presumes events are in datetime order
           * Count number of comments for different roles
     """
@@ -37,6 +37,7 @@ def summarize_applications(df):
                     to = i
 
                 app = parse_application_summary(prevApplicationId, prevOperationId, prevMunicipalityId, df[startIndex:to])
+
                 if summary is None:
                     summary = pd.DataFrame(app, index = [0])
                 else:
@@ -51,10 +52,12 @@ def summarize_applications(df):
 
         show_progress_bar(i, len(df))
 
+    if odf is not None:
+        summary = pd.merge(summary, odf, on = 'applicationId')
     return summary
 
 def parse_application_summary(applicationId, operation, municipalityId, events):
-    return {    "_applicationId": applicationId, 
+    app = {    "applicationId": applicationId, 
                 "_municipalityId": municipalityId,
                 "_operationId": operation,
                 "events": len(events),
@@ -75,6 +78,7 @@ def parse_application_summary(applicationId, operation, municipalityId, events):
                                 len(find_events_by_action(events, 'cancel-application-authority')) > 0,
                 "daysFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
 
+    return app
 
 def find_unique_users_by_application(events):
 	return events.userId.nunique()

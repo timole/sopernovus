@@ -14,9 +14,10 @@ import utils, data_helper, analysis
 
 def parse_args():
     parser = argparse.ArgumentParser(description='SOPERNOVUS analysator')
-    parser.add_argument('-i', '--input-file', help='Input CSV file', required=True)
+    parser.add_argument('-i', '--input-file', help='Input CSV file for usage data', required=True)
+    parser.add_argument('-io', '--input-file-operative', help='Input CSV file for operative data', required=False)
     parser.add_argument('-o', '--output-file', help='Output CSV file', required=False, default = None)
-    parser.add_argument('-p', '--prediction-output-file', help='Output CSV file for prediction', required=False, default = None)
+    parser.add_argument('-p', '--prediction-output-file', help='Output CSV file', required=False, default = None)
     args = vars(parser.parse_args())
     return args
 
@@ -31,7 +32,7 @@ def create_application_summary(outputFileName):
 
     # exported to global scope for debugging purposes
     global appsSummary
-    appsSummary =  analysis.summarize_applications(df)
+    appsSummary =  analysis.summarize_applications(df, odf)
 
     logger.info("N of applications = {}".format(len(appsSummary)))
     print(appsSummary)
@@ -60,6 +61,7 @@ def create_prediction_summary(outputFileName):
 def main():
     args = parse_args()
     inputFileName = args['input_file']
+    inputFileNameOperative = args['input_file_operative']
     outputFileName = args['output_file']
     predictionOutputFileName = args['prediction_output_file']
 
@@ -67,6 +69,10 @@ def main():
     logger = logging.getLogger(__name__)
 
     logger.info("Data file: {}".format(inputFileName))
+    if inputFileNameOperative:
+        logger.info("Operative data file: {}".format(inputFileNameOperative))
+    else:
+        logger.info("No operative data available.")
 
     startTime = datetime.datetime.now()
 
@@ -74,10 +80,17 @@ def main():
     global df
     df = data_helper.import_data(inputFileName)
 
+    global odf
+
+    if inputFileNameOperative:
+        odf = data_helper.import_operative_data(inputFileNameOperative)
+    else:
+        odf = None
+
     logger.info("N of events: {}, from {} to {} ".format(len(df), df['datetime'].min(), df['datetime'].max()))
 
     create_application_summary(outputFileName)
-    create_prediction_summary(predictionOutputFileName)
+#    create_prediction_summary(predictionOutputFileName)
 
     print_stats(startTime)
 
