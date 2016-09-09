@@ -88,5 +88,11 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['daysFromSubmissionToVerdict'].item(), 31)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['daysFromSubmissionToVerdict'].item(), None)
 
+    def test_lead_times(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['leadTimeCreated2VerdictGiven'].item(), 49)
+
+
 if __name__ == '__main__':
     unittest.main()
