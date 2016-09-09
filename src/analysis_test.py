@@ -5,6 +5,7 @@ import analysis
 import pdb
 
 _TEST_DATA_FILE = "lupapiste-usage-test.csv"
+_OPERATIVE_TEST_DATA_FILE = "lupapiste-operative-test.csv"
 
 class TestApplicationSummary(unittest.TestCase):
 
@@ -12,19 +13,21 @@ class TestApplicationSummary(unittest.TestCase):
     def setUpClass(self):
         #TODO relative path to something better?
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
-        self.apps = analysis.summarize_applications(self.df, None)
+        self.odf = data_helper.import_operative_data("data/" + _OPERATIVE_TEST_DATA_FILE)
+        self.apps = analysis.summarize_applications(self.df, self.odf)
 
         # print apps once for debugging
         print "Application summary based on test data:"
         print self.apps
 
     def test_number_of_applications(self):
-        self.assertEqual(len(self.apps), 5)
+        self.assertEqual(len(self.apps), 3)
 
     def test_operation_type(self):
         apps = self.apps
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['_operationId'].item(), "asuinrakennus")
-        self.assertEqual(apps[apps['applicationId'] == 'LP-103']['_operationId'].item(), "muu-maisema-toimenpide")
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['_operationId'].item(), "pientalo")
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['_operationId'].item(), "muu-maisema-toimenpide")
 
     def test_municipality(self):
         apps = self.apps
@@ -34,7 +37,7 @@ class TestApplicationSummary(unittest.TestCase):
         apps = self.apps
 
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 136)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 7)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 78)
 
 
     def test_number_of_comments(self):
@@ -42,12 +45,12 @@ class TestApplicationSummary(unittest.TestCase):
 
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['comments'].item(), 0)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['comments'].item(), 0)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['comments'].item(), 4)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['comments'].item(), 5)
 
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['commentsApplicant'].item(), 0)
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['commentsAuthority'].item(), 0)
         
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['commentsApplicant'].item(), 1)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['commentsApplicant'].item(), 2)
         self.assertEqual(apps[apps['applicationId'] == 'LP-102']['commentsAuthority'].item(), 3)
 
     def test_number_of_update_docs(self):
@@ -71,9 +74,7 @@ class TestApplicationSummary(unittest.TestCase):
     def test_is_cancelled(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['isCancelled'].item(), False)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-103']['isCancelled'].item(), True)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-104']['isCancelled'].item(), True)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['isCancelled'].item(), True)
 
     def test_has_verdict(self):
         apps = self.apps

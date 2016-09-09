@@ -1,0 +1,4 @@
+applicationId;municipalityId;permitType;state;operationId;operationId2;operationId3;operations;createdDate;submittedDate;sentDate;canceledDate;verdictGivenDate;canceledDate;isCanceled
+LP-100;090;R;verdictGiven;asuinrakennus;;;asuinrakennus;2014-04-24 07:47:10.448000;2014-05-15 08:32:29.109000;2014-06-09 08:29:33.676000;;2014-06-12 22:00:00;;false
+LP-101;106;R;canceled;pientalo;;;pientalo;2015-04-23 12:21:01.800000;;;2016-02-15 15:43:57.082000;;2016-02-15 15:43:57.082000;true
+LP-102;139;R;canceled;muu-maisema-toimenpide;;;muu-maisema-toimenpide;2015-11-17 13:56:05.751000;;;2015-12-30 09:38:51.645000;;2015-12-30 09:38:51.645000;true
