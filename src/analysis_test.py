@@ -28,13 +28,13 @@ class TestApplicationSummary(unittest.TestCase):
 
     def test_municipality(self):
         apps = self.apps
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['_municipalityId'].item(), 1056)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['_municipalityId'].item(), 90)
 
     def test_number_of_events(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 129)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 5)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 136)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 7)
 
 
     def test_number_of_comments(self):
