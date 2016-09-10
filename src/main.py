@@ -66,7 +66,7 @@ def main():
     predictionOutputFileName = args['prediction_output_file']
 
     utils.log_config()
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("sopernovus")
 
     logger.info("Data file: {}".format(inputFileName))
     if inputFileNameOperative:

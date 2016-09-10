@@ -234,3 +234,4 @@ datetime;applicationId;isInfoRequest;operation;municipalityId;userId;role;action
 2015-04-23 14:53:36.687;LP-901;0;pientalo;106;101302;applicant;update-doc;hallintaperuste
 2015-04-23 14:53:38.429;LP-901;0;pientalo;106;101302;applicant;update-doc;kaavatilanne
 2015-04-23 14:54:11.800;LP-901;0;pientalo;106;101302;applicant;update-doc;kuvaus
+2015-03-23 10:02:49.393;LP-999;0;muu-maisema-toimenpide;139;109387;applicant;mark-seen;comments

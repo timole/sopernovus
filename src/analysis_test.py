@@ -1,8 +1,10 @@
 import unittest
 
 import data_helper
+import utils
 import analysis
 import pdb
+import logging
 
 _TEST_DATA_FILE = "lupapiste-usage-test.csv"
 _OPERATIVE_TEST_DATA_FILE = "lupapiste-operative-test.csv"
@@ -25,13 +27,13 @@ class TestApplicationSummary(unittest.TestCase):
 
     def test_operation_type(self):
         apps = self.apps
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['_operationId'].item(), "asuinrakennus")
-        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['_operationId'].item(), "pientalo")
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['_operationId'].item(), "muu-maisema-toimenpide")
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['operationId'].item(), "asuinrakennus")
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['operationId'].item(), "pientalo")
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['operationId'].item(), "muu-maisema-toimenpide")
 
     def test_municipality(self):
         apps = self.apps
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['_municipalityId'].item(), 90)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['municipalityId'].item(), 90)
 
     def test_number_of_events(self):
         apps = self.apps
@@ -85,7 +87,7 @@ class TestApplicationSummary(unittest.TestCase):
     def test_days_from_submission_to_verdict(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['daysFromSubmissionToVerdict'].item(), 31)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['daysFromSubmissionToVerdict'].item(), 32)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['daysFromSubmissionToVerdict'].item(), None)
 
     def test_lead_times(self):
@@ -100,4 +102,7 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 'LP-901']['flowEfficiency'].item(), 50)
 
 if __name__ == '__main__':
+    utils.log_config()
+    logger = logging.getLogger("sopernovus")
+    logger.info("Run unit tests")
     unittest.main()

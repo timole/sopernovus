@@ -3,7 +3,7 @@ from datetime import timedelta
 import pandas as pd
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('sopernovus')
 
 SESSION_THRESHOLD_IN_MINUTES = 15
 
@@ -23,44 +23,28 @@ def summarize_applications(df, odf):
     numberOfApplications = df["applicationId"].nunique()
 
     logger.info("Analyzing events")
-    iterator = df.iterrows()
-    for index, row in iterator:
-        applicationId = row['applicationId']
 
-        if applicationId != prevApplicationId and i != 0 or i == len(df) - 1:
-            if prevApplicationId is not None:
-                logger.debug("Handle events for application {}".format(applicationId))
+    applicationIds = df['applicationId'].unique()
+    for applicationId in applicationIds:
+        appInfo = odf[odf['applicationId'] == applicationId]
+        if appInfo.empty:
+            logger.error("No operative data available for application " + applicationId)
+            continue
 
-                if i == len(df) - 1:
-                    to = i + 1
-                else:
-                    to = i
+        app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId])
 
-                app = parse_application_summary(prevApplicationId, prevOperationId, prevMunicipalityId, df[startIndex:to], odf[odf['applicationId'] == prevApplicationId].iloc[0].to_dict())
-
-                if summary is None:
-                    summary = pd.DataFrame(app, index = [0])
-                else:
-                    summary.loc[len(summary)] = app
-            startIndex = i
-
-        prevApplicationId = applicationId
-        prevOperationId = row['operation']
-        prevMunicipalityId = row['municipalityId']
-
-        i = i + 1
-
-        show_progress_bar(i, len(df))
+        if summary is None:
+            summary = pd.DataFrame(app, index = [0])
+        else:
+            summary.loc[len(summary)] = app
 
     if odf is not None:
         summary = pd.merge(summary, odf, on = 'applicationId')
 
     return summary
 
-def parse_application_summary(applicationId, operation, municipalityId, events, appInfo):
+def parse_application_summary(applicationId, appInfo, events):
     app = {    "applicationId": applicationId, 
-                "_municipalityId": municipalityId,
-                "_operationId": operation,
                 "events": len(events),
 				"userIds": find_unique_users_by_application(events),
                 "comments": len(find_events_by_action_and_target(events, 'add-comment', 'application')),
@@ -156,7 +140,7 @@ def count_days_between_events(events, fromEvent, tillEvent):
         firstSubmission = e1.iloc(0)
         verdictGiven = e2.iloc(0)        
         timeBetween = e2['datetime'].iloc[0] - e1['datetime'].iloc[0]
-        return timeBetween.days
+        return timeBetween.days + 1
     else:
         return None
 
@@ -175,5 +159,4 @@ def count_flow_efficiency(app, events, fromDate, tillDate):
 
     nOfProcessedDays = len(events['datetime'].dt.normalize().unique())
     flowEfficiency = int(round(float(nOfProcessedDays) / days, 2) * 100)
-
     return flowEfficiency
