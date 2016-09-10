@@ -17,10 +17,10 @@ def summarize_applications(df, odf):
     summary = None
 
     df = df.sort_values(['applicationId', 'datetime'])
-
     numberOfApplications = df["applicationId"].nunique()
 
-    logger.info("Analyzing events")
+    actions = df["action"].unique()
+    logger.info("Analyzing {} events with {} unique actions".format(len(df), len(actions)))
 
     applicationIds = df['applicationId'].unique()
     nTotal = len(applicationIds)
@@ -76,11 +76,11 @@ def parse_application_summary(applicationId, appInfo, events):
                 "leadTime": count_days(appInfo, 'createdDate', 'verdictGivenDate'),
                 "leadTimeCreated2Canceled": count_days(appInfo, 'createdDate', 'canceledDate'),
                 "leadTimeSubmitted2VerdictGiven": count_days(appInfo, 'submittedDate', 'verdictGivenDate'),
+                "flowEfficiency": count_flow_efficiency(appInfo, events, 'createdDate', 'verdictGivenDate'),
                 "flowEfficiencyCreated2Submitted": count_flow_efficiency(appInfo, events, 'createdDate', 'submittedDate'),
                 "flowEfficiencySubmitted2Sent": count_flow_efficiency(appInfo, events, 'submittedDate', 'sentDate'),
                 "flowEfficiencySent2VerdictGiven": count_flow_efficiency(appInfo, events, 'sentDate', 'verdictGivenDate'),
                 "flowEfficiencyCreated2Sent": count_flow_efficiency(appInfo, events, 'createdDate', 'sentDate'),
-                "flowEfficiency": count_flow_efficiency(appInfo, events, 'createdDate', 'verdictGivenDate'),
                 "flowEfficiencyCreated2Canceled": count_flow_efficiency(appInfo, events, 'createdDate', 'canceledDate'),
                 "flowEfficiencySubmitted2VerdictGiven": count_flow_efficiency(appInfo, events, 'submittedDate', 'verdictGivenDate')
             }
@@ -165,8 +165,8 @@ def count_flow_efficiency(app, events, fromDate, tillDate):
         return None
 
     activeDates = events['datetime'].dt.normalize()
-    activeDates = activeDates[activeDates >= app[fromDate]]
-    activeDates = activeDates[activeDates <= app[tillDate]]
+    activeDates = activeDates[activeDates >= app[fromDate].normalize()]
+    activeDates = activeDates[activeDates <= app[tillDate].normalize()]
 
     nOfProcessedDays = len(activeDates.unique())
     flowEfficiency = int(round(float(nOfProcessedDays) / days, 2) * 100)

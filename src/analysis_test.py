@@ -97,7 +97,7 @@ class TestApplicationSummary(unittest.TestCase):
 
     def test_flow_efficiency(self):
         apps = self.apps
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['flowEfficiency'].item(), 14)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['flowEfficiency'].item(), 10)
         self.assertEqual(apps[apps['applicationId'] == 'LP-900']['flowEfficiency'].item(), 100)
         self.assertEqual(apps[apps['applicationId'] == 'LP-901']['flowEfficiency'].item(), 50)
 
