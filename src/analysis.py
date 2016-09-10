@@ -3,7 +3,7 @@ from datetime import timedelta
 import pandas as pd
 import logging
 
-logger = logging.getLogger('sopernovus')
+logger = logging.getLogger(__name__)
 
 SESSION_THRESHOLD_IN_MINUTES = 15
 
@@ -28,7 +28,7 @@ def summarize_applications(df, odf):
     for applicationId in applicationIds:
         appInfo = odf[odf['applicationId'] == applicationId]
         if appInfo.empty:
-            logger.error("No operative data available for application " + applicationId)
+            logger.info("No operative data available for application (infoRequest) " + applicationId)
             continue
 
         app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId])
@@ -154,9 +154,10 @@ def count_days(app, fromDate, tillDate):
 
 def count_flow_efficiency(app, events, fromDate, tillDate):
     days = count_days(app, fromDate, tillDate)
-    if days is None:
+    if days is None or days <= 0:
         return None
 
     nOfProcessedDays = len(events['datetime'].dt.normalize().unique())
     flowEfficiency = int(round(float(nOfProcessedDays) / days, 2) * 100)
+
     return flowEfficiency
