@@ -101,6 +101,10 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 'LP-900']['flowEfficiency'].item(), 100)
         self.assertEqual(apps[apps['applicationId'] == 'LP-901']['flowEfficiency'].item(), 50)
 
+    def test_count_unique_action(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['n-create-doc'].item(), 2)
+
 if __name__ == '__main__':
     utils.log_config()
     logger = logging.getLogger(__name__)

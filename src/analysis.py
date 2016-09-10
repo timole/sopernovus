@@ -19,8 +19,8 @@ def summarize_applications(df, odf):
     df = df.sort_values(['applicationId', 'datetime'])
     numberOfApplications = df["applicationId"].nunique()
 
-    actions = df["action"].unique()
-    logger.info("Analyzing {} events with {} unique actions".format(len(df), len(actions)))
+    uniqueActions = df["action"].unique()
+    logger.info("Analyzing {} events with {} unique actions".format(len(df), len(uniqueActions)))
 
     applicationIds = df['applicationId'].unique()
     nTotal = len(applicationIds)
@@ -31,7 +31,7 @@ def summarize_applications(df, odf):
                 logger.debug("No operative data available for application (infoRequest) " + applicationId)
                 continue
 
-            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId])
+            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId], uniqueActions)
 
             if summary is None:
                 summary = pd.DataFrame(app, index = [0])
@@ -50,7 +50,7 @@ def summarize_applications(df, odf):
 
     return summary
 
-def parse_application_summary(applicationId, appInfo, events):
+def parse_application_summary(applicationId, appInfo, events, uniqueActions):
     app = {    "applicationId": applicationId, 
                 "events": len(events),
 				"userIds": find_unique_users_by_application(events),
@@ -85,7 +85,13 @@ def parse_application_summary(applicationId, appInfo, events):
                 "flowEfficiencySubmitted2VerdictGiven": count_flow_efficiency(appInfo, events, 'submittedDate', 'verdictGivenDate')
             }
 
+    count_number_of_unique_actions(app, events, uniqueActions)
     return app
+
+def count_number_of_unique_actions(app, events, uniqueActions):
+    for action in uniqueActions:
+        fieldName = "n-" + action
+        app[fieldName] = len(find_events_by_action(events, action))
 
 def find_unique_users_by_application(events):
 	return events.userId.nunique()
