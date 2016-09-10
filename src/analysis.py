@@ -82,11 +82,18 @@ def parse_application_summary(applicationId, operation, municipalityId, events, 
                 "leadTimeSubmitted2Sent": count_days(appInfo, 'submittedDate', 'sentDate'),
                 "leadTimeSent2VerdictGiven": count_days(appInfo, 'sentDate', 'verdictGivenDate'),
                 "leadTimeCreated2Sent": count_days(appInfo, 'createdDate', 'sentDate'),
-                "leadTimeCreated2VerdictGiven": count_days(appInfo, 'createdDate', 'verdictGivenDate'),
+                "leadTime": count_days(appInfo, 'createdDate', 'verdictGivenDate'),
                 "leadTimeCreated2Canceled": count_days(appInfo, 'createdDate', 'canceledDate'),
-                "leadTimeSubmitted2VerdictGiven": count_days(appInfo, 'submittedDate', 'verdictGivenDate')
+                "leadTimeSubmitted2VerdictGiven": count_days(appInfo, 'submittedDate', 'verdictGivenDate'),
+                "flowEfficiencyCreated2Submitted": count_flow_efficiency(appInfo, events, 'createdDate', 'submittedDate'),
+                "flowEfficiencySubmitted2Sent": count_flow_efficiency(appInfo, events, 'submittedDate', 'sentDate'),
+                "flowEfficiencySent2VerdictGiven": count_flow_efficiency(appInfo, events, 'sentDate', 'verdictGivenDate'),
+                "flowEfficiencyCreated2Sent": count_flow_efficiency(appInfo, events, 'createdDate', 'sentDate'),
+                "flowEfficiency": count_flow_efficiency(appInfo, events, 'createdDate', 'verdictGivenDate'),
+                "flowEfficiencyCreated2Canceled": count_flow_efficiency(appInfo, events, 'createdDate', 'canceledDate'),
+                "flowEfficiencySubmitted2VerdictGiven": count_flow_efficiency(appInfo, events, 'submittedDate', 'verdictGivenDate')
             }
-
+    pdb.set_trace()
     return app
 
 def find_unique_users_by_application(events):
@@ -160,3 +167,13 @@ def count_days(app, fromDate, tillDate):
         return None
     else:
         return int(delta.days)
+
+def count_flow_efficiency(app, events, fromDate, tillDate):
+    days = count_days(app, fromDate, tillDate)
+    if days is None:
+        return None
+
+    nOfProcessedDays = len(events['datetime'].dt.normalize().unique())
+    flowEfficiency = int(round(float(nOfProcessedDays) / days, 2) * 100)
+
+    return flowEfficiency

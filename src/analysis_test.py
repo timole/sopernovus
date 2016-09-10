@@ -91,8 +91,11 @@ class TestApplicationSummary(unittest.TestCase):
     def test_lead_times(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['leadTimeCreated2VerdictGiven'].item(), 49)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['leadTime'].item(), 49)
 
+    def test_flow_efficiency(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['flowEfficiency'].item(), 14)
 
 if __name__ == '__main__':
     unittest.main()
