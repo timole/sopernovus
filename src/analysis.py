@@ -93,7 +93,7 @@ def parse_application_summary(applicationId, operation, municipalityId, events, 
                 "flowEfficiencyCreated2Canceled": count_flow_efficiency(appInfo, events, 'createdDate', 'canceledDate'),
                 "flowEfficiencySubmitted2VerdictGiven": count_flow_efficiency(appInfo, events, 'submittedDate', 'verdictGivenDate')
             }
-    pdb.set_trace()
+
     return app
 
 def find_unique_users_by_application(events):
@@ -166,7 +166,7 @@ def count_days(app, fromDate, tillDate):
     if pd.isnull(delta):
         return None
     else:
-        return int(delta.days)
+        return int(delta.days + 1)
 
 def count_flow_efficiency(app, events, fromDate, tillDate):
     days = count_days(app, fromDate, tillDate)

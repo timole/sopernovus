@@ -21,7 +21,7 @@ class TestApplicationSummary(unittest.TestCase):
         print self.apps
 
     def test_number_of_applications(self):
-        self.assertEqual(len(self.apps), 3)
+        self.assertEqual(len(self.apps), 5)
 
     def test_operation_type(self):
         apps = self.apps
@@ -91,11 +91,13 @@ class TestApplicationSummary(unittest.TestCase):
     def test_lead_times(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['leadTime'].item(), 49)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['leadTime'].item(), 50)
 
     def test_flow_efficiency(self):
         apps = self.apps
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['flowEfficiency'].item(), 14)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-900']['flowEfficiency'].item(), 100)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-901']['flowEfficiency'].item(), 50)
 
 if __name__ == '__main__':
     unittest.main()
