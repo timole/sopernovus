@@ -12,9 +12,7 @@ def summarize_applications(df, odf):
           * Count number of comments for different roles
     """
 
-    prevApplicationId = None
-    startIndex = 0
-    i = 0
+    n = 0
 
     summary = None
 
@@ -25,18 +23,27 @@ def summarize_applications(df, odf):
     logger.info("Analyzing events")
 
     applicationIds = df['applicationId'].unique()
+    nTotal = len(applicationIds)
     for applicationId in applicationIds:
-        appInfo = odf[odf['applicationId'] == applicationId]
-        if appInfo.empty:
-            logger.info("No operative data available for application (infoRequest) " + applicationId)
-            continue
+        try:
+            appInfo = odf[odf['applicationId'] == applicationId]
+            if appInfo.empty:
+                logger.debug("No operative data available for application (infoRequest) " + applicationId)
+                continue
 
-        app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId])
+            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId])
 
-        if summary is None:
-            summary = pd.DataFrame(app, index = [0])
-        else:
-            summary.loc[len(summary)] = app
+            if summary is None:
+                summary = pd.DataFrame(app, index = [0])
+            else:
+                summary.loc[len(summary)] = app
+
+            if n % 100 == 0:
+                logger.info("Processed {}%".format( round( float(n) / nTotal * 100, 1)))
+        except:
+            logger.error("Unhandled exception with id {}".format(applicationId))
+
+        n = n + 1
 
     if odf is not None:
         summary = pd.merge(summary, odf, on = 'applicationId')
@@ -157,7 +164,11 @@ def count_flow_efficiency(app, events, fromDate, tillDate):
     if days is None or days <= 0:
         return None
 
-    nOfProcessedDays = len(events['datetime'].dt.normalize().unique())
+    activeDates = events['datetime'].dt.normalize()
+    activeDates = activeDates[activeDates >= app[fromDate]]
+    activeDates = activeDates[activeDates <= app[tillDate]]
+
+    nOfProcessedDays = len(activeDates.unique())
     flowEfficiency = int(round(float(nOfProcessedDays) / days, 2) * 100)
 
     return flowEfficiency
