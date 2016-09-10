@@ -7,4 +7,4 @@ def log_config():
 
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
-    logging.getLogger('sopernovus').addHandler(console)
+    logging.getLogger().addHandler(console)

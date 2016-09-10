@@ -103,6 +103,6 @@ class TestApplicationSummary(unittest.TestCase):
 
 if __name__ == '__main__':
     utils.log_config()
-    logger = logging.getLogger("sopernovus")
+    logger = logging.getLogger(__name__)
     logger.info("Run unit tests")
     unittest.main()
