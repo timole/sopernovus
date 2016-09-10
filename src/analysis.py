@@ -36,7 +36,7 @@ def summarize_applications(df, odf):
                 else:
                     to = i
 
-                app = parse_application_summary(prevApplicationId, prevOperationId, prevMunicipalityId, df[startIndex:to])
+                app = parse_application_summary(prevApplicationId, prevOperationId, prevMunicipalityId, df[startIndex:to], odf[odf['applicationId'] == prevApplicationId].iloc[0].to_dict())
 
                 if summary is None:
                     summary = pd.DataFrame(app, index = [0])
@@ -54,10 +54,10 @@ def summarize_applications(df, odf):
 
     if odf is not None:
         summary = pd.merge(summary, odf, on = 'applicationId')
-        summary = count_operative_data_columns(summary)
+
     return summary
 
-def parse_application_summary(applicationId, operation, municipalityId, events):
+def parse_application_summary(applicationId, operation, municipalityId, events, appInfo):
     app = {    "applicationId": applicationId, 
                 "_municipalityId": municipalityId,
                 "_operationId": operation,
@@ -77,7 +77,15 @@ def parse_application_summary(applicationId, operation, municipalityId, events):
                 "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
                 "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
                                 len(find_events_by_action(events, 'cancel-application-authority')) > 0,
-                "daysFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict') }
+                "daysFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict'),
+                "leadTimeCreated2Submitted": count_days(appInfo, 'createdDate', 'submittedDate'),
+                "leadTimeSubmitted2Sent": count_days(appInfo, 'submittedDate', 'sentDate'),
+                "leadTimeSent2VerdictGiven": count_days(appInfo, 'sentDate', 'verdictGivenDate'),
+                "leadTimeCreated2Sent": count_days(appInfo, 'createdDate', 'sentDate'),
+                "leadTimeCreated2VerdictGiven": count_days(appInfo, 'createdDate', 'verdictGivenDate'),
+                "leadTimeCreated2Canceled": count_days(appInfo, 'createdDate', 'canceledDate'),
+                "leadTimeSubmitted2VerdictGiven": count_days(appInfo, 'submittedDate', 'verdictGivenDate')
+            }
 
     return app
 
@@ -145,19 +153,9 @@ def count_days_between_events(events, fromEvent, tillEvent):
     else:
         return None
 
-def count_operative_data_columns(df):
-    df['leadTimeCreated2Submitted'] = df.apply(lambda app: count_days(app, 'createdDate', 'submittedDate'), axis = 1)
-    df['leadTimeSubmitted2Sent'] = df.apply(lambda app: count_days(app, 'submittedDate', 'sentDate'), axis = 1)
-    df['leadTimeSent2VerdictGiven'] = df.apply(lambda app: count_days(app, 'sentDate', 'verdictGivenDate'), axis = 1)
-    df['leadTimeCreated2Sent'] = df.apply(lambda app: count_days(app, 'createdDate', 'sentDate'), axis = 1)
-    df['leadTimeCreated2VerdictGiven'] = df.apply(lambda app: count_days(app, 'createdDate', 'verdictGivenDate'), axis = 1)
-    df['leadTimeCreated2Canceled'] = df.apply(lambda app: count_days(app, 'createdDate', 'canceledDate'), axis = 1)
-    df['leadTimeSubmitted2VerdictGiven'] = df.apply(lambda app: count_days(app, 'submittedDate', 'verdictGivenDate'), axis = 1)
-    df['leadTime'] = df['leadTimeCreated2VerdictGiven']
-    return df
-
 def count_days(app, fromDate, tillDate):
     delta = app[tillDate] - app[fromDate]
+
     if pd.isnull(delta):
         return None
     else:
