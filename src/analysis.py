@@ -25,6 +25,7 @@ def summarize_applications(df, odf):
     applicationIds = df['applicationId'].unique()
     nTotal = len(applicationIds)
     for applicationId in applicationIds:
+        n = n + 1
         try:
             appInfo = odf[odf['applicationId'] == applicationId]
             if appInfo.empty:
@@ -43,7 +44,6 @@ def summarize_applications(df, odf):
         except:
             logger.error("Unhandled exception with id {}".format(applicationId))
 
-        n = n + 1
 
     if odf is not None:
         summary = pd.merge(summary, odf, on = 'applicationId')
