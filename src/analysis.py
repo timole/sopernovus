@@ -39,7 +39,7 @@ def summarize_applications(df, odf):
             else:
                 summary.loc[len(summary)] = app
 
-            if n % 100 == 0:
+            if n % 1000 == 0:
                 logger.info("Processed {}%".format( round( float(n) / nTotal * 100, 1)))
         except:
             logger.error("Unhandled exception with id {}".format(applicationId))

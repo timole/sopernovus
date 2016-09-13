@@ -3,6 +3,7 @@ import unittest
 import data_helper
 import utils
 import analysis
+import user_analysis
 import pdb
 import logging
 
@@ -105,8 +106,31 @@ class TestApplicationSummary(unittest.TestCase):
         apps = self.apps
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['n-create-doc'].item(), 2)
 
+
+class TestUsersSummary(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
+        self.users = user_analysis.summarize_users(self.df)
+
+        # print apps once for debugging
+        print "Summary of users based on test data:"
+        print self.users
+
+    def test_number_of_users(self):
+        self.assertEqual(len(self.users), 5)
+
+    def test_user_applications(self):
+        users = self.users
+
+        self.assertEqual(len(users), 5)
+        self.assertEqual(users[users['userId'] == 101302]['applicantRoles'].item(), 3)
+        self.assertEqual(users[users['userId'] == 101346]['authorityRoles'].item(), 1)
+
 if __name__ == '__main__':
     utils.log_config()
     logger = logging.getLogger(__name__)
     logger.info("Run unit tests")
     unittest.main()
+
