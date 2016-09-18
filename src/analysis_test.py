@@ -106,6 +106,15 @@ class TestApplicationSummary(unittest.TestCase):
         apps = self.apps
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['n-create-doc'].item(), 2)
 
+    def test_applicants(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['applicationId'] == 'LP-900']['applicantId'].item(), 101302)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-900']['applicants'].item(), 2)
+
+    def test_authorities(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['authorityId'].item(), 102986)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['authorities'].item(), 1)
 
 class TestUsersSummary(unittest.TestCase):
 
@@ -119,14 +128,14 @@ class TestUsersSummary(unittest.TestCase):
         print self.users
 
     def test_number_of_users(self):
-        self.assertEqual(len(self.users), 5)
+        self.assertEqual(len(self.users), 6)
 
     def test_user_applications(self):
         users = self.users
 
-        self.assertEqual(len(users), 5)
         self.assertEqual(users[users['userId'] == 101302]['applicantRoles'].item(), 3)
         self.assertEqual(users[users['userId'] == 101346]['authorityRoles'].item(), 1)
+
 
 if __name__ == '__main__':
     utils.log_config()

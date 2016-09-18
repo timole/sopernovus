@@ -229,6 +229,7 @@ datetime;applicationId;isInfoRequest;operation;municipalityId;userId;role;action
 2015-04-23 14:53:36.687;LP-900;0;pientalo;106;101302;applicant;update-doc;hallintaperuste
 2015-04-23 14:53:38.429;LP-900;0;pientalo;106;101302;applicant;update-doc;kaavatilanne
 2015-04-23 14:54:11.800;LP-900;0;pientalo;106;101302;applicant;update-doc;kuvaus
+2015-04-23 14:54:11.800;LP-900;0;pientalo;106;101303;applicant;update-doc;kuvaus
 2015-04-23 14:25:20.914;LP-901;0;pientalo;106;101302;applicant;mark-seen;comments
 2015-04-23 14:53:22.153;LP-901;0;pientalo;106;101302;applicant;change-location;
 2015-04-23 14:53:36.687;LP-901;0;pientalo;106;101302;applicant;update-doc;hallintaperuste

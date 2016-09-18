@@ -26,23 +26,23 @@ def summarize_applications(df, odf):
     nTotal = len(applicationIds)
     for applicationId in applicationIds:
         n = n + 1
-        try:
-            appInfo = odf[odf['applicationId'] == applicationId]
-            if appInfo.empty:
-                logger.debug("No operative data available for application (infoRequest) " + applicationId)
-                continue
+#        try:
+        appInfo = odf[odf['applicationId'] == applicationId]
+        if appInfo.empty:
+            logger.debug("No operative data available for application (infoRequest) " + applicationId)
+            continue
 
-            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId], uniqueActions)
+        app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId], uniqueActions)
 
-            if summary is None:
-                summary = pd.DataFrame(app, index = [0])
-            else:
-                summary.loc[len(summary)] = app
+        if summary is None:
+            summary = pd.DataFrame(app, index = [0])
+        else:
+            summary.loc[len(summary)] = app
 
-            if n % 1000 == 0:
-                logger.info("Processed {}%".format( round( float(n) / nTotal * 100, 1)))
-        except:
-            logger.error("Unhandled exception with id {}".format(applicationId))
+        if n % 1000 == 0:
+            logger.info("Processed {}%".format( round( float(n) / nTotal * 100, 1)))
+#        except:
+#            logger.error("Unhandled exception with id {}".format(applicationId))
 
 
     if odf is not None:
@@ -54,6 +54,14 @@ def parse_application_summary(applicationId, appInfo, events, uniqueActions):
     app = {    "applicationId": applicationId, 
                 "events": len(events),
 				"userIds": find_unique_users_by_application(events),
+                "applicants": find_unique_users_by_application_and_role(events, 'applicant'),
+                "applicantId": get_role_user_id(events, 'applicant', 0),
+                "applicantId2": get_role_user_id(events, 'applicant', 1),
+                "applicantIds": get_role_user_ids(events, 'applicant'),
+                "authorityId": get_role_user_id(events, 'authority', 0),
+                "authorityId2": get_role_user_id(events, 'authority', 1),
+                "authorityIds": get_role_user_ids(events, 'authority'),
+                "authorities": find_unique_users_by_application_and_role(events, 'authority'),
                 "comments": len(find_events_by_action_and_target(events, 'add-comment', 'application')),
                 "commentsApplicant": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'applicant', 'application')),
                 "commentsAuthority": len(find_events_by_action_and_role_and_target(events, 'add-comment', 'authority', 'application')),
@@ -93,8 +101,33 @@ def count_number_of_unique_actions(app, events, uniqueActions):
         fieldName = "n-" + action
         app[fieldName] = len(find_events_by_action(events, action))
 
+def get_role_user_id(events, role, index):
+    vc = find_userId_value_counts_by_role(events, role)
+
+    if index > (len(vc) - 1):
+        return None
+    else:
+        return vc.sort_values(ascending = False).index[index]
+
+def find_userId_value_counts_by_role(events, role):
+    result = events[events['role'] == role]
+    return result.userId.value_counts()
+
+def get_role_user_ids(events, role):
+    result = events[events['role'] == role]
+    val = ""
+    for id in result.userId.unique():
+        if len(val) > 0:
+            val = val + ','
+        val = val + str(id)
+    return val
+
 def find_unique_users_by_application(events):
 	return events.userId.nunique()
+
+def find_unique_users_by_application_and_role(events, role):
+    result = events[events['role'] == role]
+    return result.userId.nunique()
 
 def find_events_by_action(events, action):
     return events[events['action'] == action]
