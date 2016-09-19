@@ -153,8 +153,8 @@ for application in applications:
     lat = ""
     lon = ""
     if "location-wgs84" in application.keys() and len(application["location-wgs84"]) == 2:
-        lat = str(application["location-wgs84"][0])
-        lon = str(application["location-wgs84"][1])
+        lon = str(application["location-wgs84"][0])
+        lat = str(application["location-wgs84"][1])
 
     # row = appId + ";" + created + ";" + submitted + ";" + verdictGiven + "\n"
 
