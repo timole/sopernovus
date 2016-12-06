@@ -84,12 +84,6 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['hasVerdict'].item(), True)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['hasVerdict'].item(), False)
 
-    def test_days_from_submission_to_verdict(self):
-        apps = self.apps
-
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['daysFromSubmissionToVerdict'].item(), 32)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['daysFromSubmissionToVerdict'].item(), None)
-
     def test_lead_times(self):
         apps = self.apps
 
