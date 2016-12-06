@@ -6,7 +6,7 @@ import argparse
 import json
 
 import numpy as np, pandas as pd
-import datetime
+import datetime, random
 
 from pymongo import MongoClient
 
@@ -22,6 +22,9 @@ def parse_args():
     parser.add_argument('-c', '--connection' , help='Database connection string url, default: ' + defaultConnString, required = False, default = defaultConnString)
     parser.add_argument('-d', '--db' , help='Database name', required = True)
     parser.add_argument('-o', '--output-file', help='Output CSV file', required = True, default = None)
+    parser.add_argument('-p', '--output-file-pub', help='Output pub CSV file', required = True, default = None)
+    parser.add_argument('-ia', '--input-file-applications', help='Input original application ids CSV file', required = True, default = None)
+    parser.add_argument('-im', '--input-file-municipalities', help='Input original municipality ids CSV file', required = True, default = None)
     args = vars(parser.parse_args())
     return args
 
@@ -39,9 +42,25 @@ args = parse_args()
 connectionString = args['connection']
 databaseName = args['db']
 out = open(args['output_file'], "w")
+outPub = open(args['output_file_pub'], "w")
+
+origApps = pd.read_csv(args['input_file_applications'], sep = ';')
+pubAppDict = {}
+print "create app dict"
+for index, row in origApps.iterrows():
+    pubAppDict[row["originalApplicationId"]] = row["applicationId"]
+
+origMunis = pd.read_csv(args['input_file_municipalities'], sep = ';')
+pubMuniDict = {}
+print "create muni dict"
+for index, row in origMunis.iterrows():
+    pubMuniDict[row["originalMunicipalityId"]] = row["municipalityId"]
+
+print "dicts created"
 
 # out.write("applicationId;created;submitted;verdictGiven\n")
 out.write("applicationId;municipalityId;permitType;state;operationId;operationId2;operationId3;operations;createdDate;submittedDate;sentDate;verdictGivenDate;canceledDate;isCanceled;lat;lon\n")
+outPub.write("applicationId;municipalityId;permitType;state;operationId;operationId2;operationId3;operations;createdDate;submittedDate;sentDate;verdictGivenDate;canceledDate;isCanceled;lat;lon\n")
 
 client = MongoClient(connectionString)
 db = client[databaseName]
@@ -53,6 +72,9 @@ i = 0
 applications = applications.find()
 
 print "Found {} applications".format(applications.count())
+
+errors = 0
+total = 0
 
 for application in applications:
     appId = application["_id"]
@@ -158,10 +180,34 @@ for application in applications:
 
     # row = appId + ";" + created + ";" + submitted + ";" + verdictGiven + "\n"
 
+
     row = appId + ";" + municipalityId + ";" + permitType + ";" + state + ";" + operationId + ";" + operationId2 + ";" + operationId3 + ";" + allOperations + ";"+ created + ";" + submitted + ";" + sent + ";" + verdictGiven + ";" + canceled + ";" + isCanceled + ";" + lat + ";" + lon + "\n"
     row = row.encode('utf-8')
 #    print row
     out.write(row)
+
+    municipalityId = long(municipalityId)
+    if municipalityId in pubMuniDict.keys():
+        pubMunicipalityId = str(pubMuniDict[municipalityId])
+    else:
+        print "Error: municipality id not found: " + municipalityId
+        continue
+
+    if appId in pubAppDict.keys():
+        pubAppId = "LP-" + pubMunicipalityId + "-" + str(pubAppDict[appId])
+    else:
+        report_error('n')
+        continue
+
+
+
+    pubLat = str(61.495386 + (random.random() * 2 - 1))
+    pubLon = str(23.775424 + (random.random() * 2 - 1))
+
+    pubRow = pubAppId + ";" + pubMunicipalityId + ";" + permitType + ";" + state + ";" + operationId + ";" + operationId2 + ";" + operationId3 + ";" + allOperations + ";"+ created + ";" + submitted + ";" + sent + ";" + verdictGiven + ";" + canceled + ";" + isCanceled + ";" + pubLat + ";" + pubLon + "\n"
+    pubRow = pubRow.encode('utf-8')
+#    print row
+    outPub.write(pubRow)
 
     if i % 1000 == 0:
         sys.stdout.write('.')
