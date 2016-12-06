@@ -14,7 +14,7 @@ import utils, data_helper, analysis, user_analysis
 
 def parse_args():
     parser = argparse.ArgumentParser(description='SOPERNOVUS analysator')
-    parser.add_argument('-i', '--input-file', help='Input CSV file for usage data', required=True)
+    parser.add_argument('-iu', '--input-file-usage', help='Input CSV file for usage data', required=True)
     parser.add_argument('-io', '--input-file-operative', help='Input CSV file for operative data', required=False)
     parser.add_argument('-oa', '--output-file-applications', help='Output CSV file for applications', required=False, default = None)
     parser.add_argument('-ou', '--output-file-users', help='Output CSV file for users', required=False, default = None)
@@ -76,16 +76,16 @@ def create_prediction_summary(outputFileName):
 
 def main():
     args = parse_args()
-    inputFileName = args['input_file']
+    inputFileNameUsage = args['input_file_usage']
     inputFileNameOperative = args['input_file_operative']
     outputApplicationsFileName = args['output_file_applications']
     outputUsersFileName = args['output_file_users']
     predictionOutputFileName = args['prediction_output_file']
 
-    utils.log_config()
+    utils.log_config()    
     logger = logging.getLogger(__name__)
 
-    logger.info("Data file: {}".format(inputFileName))
+    logger.info("Data file: {}".format(inputFileNameUsage))
     if inputFileNameOperative:
         logger.info("Operative data file: {}".format(inputFileNameOperative))
     else:
@@ -95,7 +95,7 @@ def main():
 
     # exported to global scope for debugging purposes
     global df
-    df = data_helper.import_data(inputFileName)
+    df = data_helper.import_data(inputFileNameUsage)
 
     global odf
 
