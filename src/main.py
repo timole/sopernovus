@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument('-io', '--input-file-operative', help='Input CSV file for operative data', required=False)
     parser.add_argument('-oa', '--output-file-applications', help='Output CSV file for applications', required=False, default = None)
     parser.add_argument('-ou', '--output-file-users', help='Output CSV file for users', required=False, default = None)
-    parser.add_argument('-p', '--prediction-output-file', help='Output CSV file', required=False, default = None)
+    parser.add_argument('-oap', '--output-file-applications-prediction', help='Output CSV file for app prediction', required=False, default = None)
     args = vars(parser.parse_args())
     return args
 
@@ -80,16 +80,10 @@ def main():
     inputFileNameOperative = args['input_file_operative']
     outputApplicationsFileName = args['output_file_applications']
     outputUsersFileName = args['output_file_users']
-    predictionOutputFileName = args['prediction_output_file']
+    predictionOutputFileName = args['output_file_applications_prediction']
 
     utils.log_config()    
     logger = logging.getLogger(__name__)
-
-    logger.info("Data file: {}".format(inputFileNameUsage))
-    if inputFileNameOperative:
-        logger.info("Operative data file: {}".format(inputFileNameOperative))
-    else:
-        logger.info("No operative data available.")
 
     startTime = datetime.datetime.now()
 
