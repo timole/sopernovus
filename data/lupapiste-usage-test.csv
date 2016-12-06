@@ -5,6 +5,7 @@ datetime;applicationId;isInfoRequest;operation;municipalityId;userId;role;action
 2014-04-24 09:53:13.295;LP-100;0;asuinrakennus;090;119087;applicant;set-user-to-document;
 2014-04-24 09:53:13.462;LP-100;0;asuinrakennus;090;119087;applicant;update-doc;rakennuksenOmistajat.0.henkilo.userId
 2014-04-24 09:54:11.689;LP-100;0;asuinrakennus;090;119087;applicant;update-doc;rakennuksenOmistajat.0.henkilo.henkilotiedot.hetu
+2014-04-24 09:54:11.690;LP-100;0;asuinrakennus;090;119087;applicant;update-doc;henkilo.henkilotiedot.sukunimi
 2014-04-24 09:54:22.823;LP-100;0;asuinrakennus;090;119087;applicant;update-doc;rakennuksenOmistajat.0.omistajalaji
 2014-04-24 09:55:33.573;LP-100;0;asuinrakennus;090;119087;applicant;update-doc;mitat.kerrosluku
 2014-04-24 09:56:25.099;LP-100;0;asuinrakennus;090;119087;applicant;update-doc;kaytto.rakentajaTyyppi

@@ -38,7 +38,7 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_events(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 136)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 137)
         self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 81)
 
 
@@ -58,7 +58,20 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_update_docs(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['updateDocs'].item(), 7)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['nUpdateDocs'].item(), 7)
+
+    def test_number_of_upload_attachments(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['nUploadAttachments'].item(), 1)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['nUploadAttachments'].item(), 0)
+
+    def test_applicant_surname_filled(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['isApplicantLastNameFilled'].item(), True)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['nUploadAttachments'].item(), False)
+
 
     def test_count_session_length(self):
         apps = self.apps
@@ -95,9 +108,9 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 'LP-900']['flowEfficiency'].item(), 100)
         self.assertEqual(apps[apps['applicationId'] == 'LP-901']['flowEfficiency'].item(), 50)
 
-    def test_count_unique_action(self):
-        apps = self.apps
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['n-create-doc'].item(), 2)
+#    def test_count_unique_action(self):
+#        apps = self.apps
+#        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['n-create-doc'].item(), 2)
 
     def test_applicants(self):
         apps = self.apps

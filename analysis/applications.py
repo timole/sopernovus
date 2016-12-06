@@ -20,6 +20,7 @@ def summarize_applications(df, odf, predictiveMode):
     numberOfApplications = df["applicationId"].nunique()
 
     uniqueActions = df["action"].unique()
+    
     logger.info("Analyzing {} events with {} unique actions".format(len(df), len(uniqueActions)))
 
     applicationIds = df['applicationId'].unique()
@@ -79,8 +80,10 @@ def parse_application_summary(applicationId, appInfo, events, uniqueActions):
                 "sessionLength": count_session_length(events, SESSION_THRESHOLD_IN_MINUTES),
                 "sessionLengthApplicant": count_session_length_by_role(events, 'applicant', SESSION_THRESHOLD_IN_MINUTES),
                 "sessionLengthAuthority": count_session_length_by_role(events, 'authority', SESSION_THRESHOLD_IN_MINUTES),
-                "updateDocs": len(find_events_by_action(events, 'update-doc')),
-                "createDocs": len(find_events_by_action(events, 'create-doc')),
+                "nUpdateDocs": len(find_events_by_action(events, 'update-doc')),
+                "nCreateDocs": len(find_events_by_action(events, 'create-doc')),
+                "nUploadAttachments": len(find_events_by_action(events, 'upload-attachment')),
+                "isApplicantLastNameFilled": len(find_events_by_action_and_target(events, 'update-doc', 'henkilo.henkilotiedot.sukunimi')) > 0,
                 "isSubmitted": len(find_events_by_action(events, 'submit-application')) > 0,
                 "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
                 "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
@@ -93,10 +96,10 @@ def parse_application_summary(applicationId, appInfo, events, uniqueActions):
                 "flowEfficiencySubmitted2VerdictGiven": count_flow_efficiency(appInfo, events, 'submittedDate', 'verdictGivenDate')
             }
 
-    count_number_of_unique_actions(app, events, uniqueActions)
+#    include_number_of_unique_actions(app, events, uniqueActions)
     return app
 
-def count_number_of_unique_actions(app, events, uniqueActions):
+def include_number_of_unique_actions(app, events, uniqueActions):
     for action in uniqueActions:
         fieldName = "n-" + action
         app[fieldName] = len(find_events_by_action(events, action))
