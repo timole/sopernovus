@@ -17,10 +17,10 @@ from analysis import applications
 def parse_args():
     parser = argparse.ArgumentParser(description='SOPERNOVUS analysator')
     parser.add_argument('-iu', '--input-file-usage', help='Input CSV file for usage data', required=True)
-    parser.add_argument('-io', '--input-file-operative', help='Input CSV file for operative data', required=False)
-    parser.add_argument('-oa', '--output-file-applications', help='Output CSV file for applications', required=False, default = None)
-    parser.add_argument('-ou', '--output-file-users', help='Output CSV file for users', required=False, default = None)
-    parser.add_argument('-oap', '--output-file-applications-prediction', help='Output CSV file for app prediction', required=False, default = None)
+    parser.add_argument('-io', '--input-file-operative', help='Input CSV file for operative data', required=True)
+    parser.add_argument('-oa', '--output-file-applications', help='Output CSV file for applications', required=True, default = None)
+    parser.add_argument('-ou', '--output-file-users', help='Output CSV file for users', required=True, default = None)
+    parser.add_argument('-oap', '--output-file-applications-prediction', help='Output CSV file for app prediction', required=True, default = None)
     args = vars(parser.parse_args())
     return args
 
@@ -35,7 +35,7 @@ def create_application_summary(outputFileName):
 
     # exported to global scope for debugging purposes
     global appsSummary
-    appsSummary =  applications.summarize_applications(df, odf, false)
+    appsSummary =  applications.summarize_applications(df, odf, False)
 
     logger.info("N of applications = {}".format(len(appsSummary)))
     print(appsSummary)
@@ -65,7 +65,7 @@ def create_prediction_summary(outputFileName):
 
     # exported to global scope for debugging purposes
     global predictionSummary
-    predictionSummary =  analysis.summarize_applications(df)
+    predictionSummary =  applications.summarize_applications(df, odf, True)
 
     logger.info("N of applications = {}".format(len(predictionSummary)))
     print(predictionSummary)
@@ -104,7 +104,7 @@ def main():
 
     create_user_summary(outputUsersFileName)
     create_application_summary(outputApplicationsFileName)
-#    create_prediction_summary(predictionOutputFileName)
+    create_prediction_summary(predictionOutputFileName)
 
     print_stats(startTime)
 

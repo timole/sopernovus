@@ -85,20 +85,11 @@ def parse_application_summary(applicationId, appInfo, events, uniqueActions):
                 "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
                 "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 
                                 len(find_events_by_action(events, 'cancel-application-authority')) > 0,
-                "daysFromSubmissionToVerdict": count_days_between_events(events, 'submit-application', 'give-verdict'),
-                "leadTimeCreated2Submitted": count_days(appInfo, 'createdDate', 'submittedDate'),
-                "leadTimeSubmitted2Sent": count_days(appInfo, 'submittedDate', 'sentDate'),
-                "leadTimeSent2VerdictGiven": count_days(appInfo, 'sentDate', 'verdictGivenDate'),
-                "leadTimeCreated2Sent": count_days(appInfo, 'createdDate', 'sentDate'),
                 "leadTime": count_days(appInfo, 'createdDate', 'verdictGivenDate'),
-                "leadTimeCreated2Canceled": count_days(appInfo, 'createdDate', 'canceledDate'),
+                "leadTimeCreated2Submitted": count_days(appInfo, 'createdDate', 'submittedDate'),
                 "leadTimeSubmitted2VerdictGiven": count_days(appInfo, 'submittedDate', 'verdictGivenDate'),
                 "flowEfficiency": count_flow_efficiency(appInfo, events, 'createdDate', 'verdictGivenDate'),
                 "flowEfficiencyCreated2Submitted": count_flow_efficiency(appInfo, events, 'createdDate', 'submittedDate'),
-                "flowEfficiencySubmitted2Sent": count_flow_efficiency(appInfo, events, 'submittedDate', 'sentDate'),
-                "flowEfficiencySent2VerdictGiven": count_flow_efficiency(appInfo, events, 'sentDate', 'verdictGivenDate'),
-                "flowEfficiencyCreated2Sent": count_flow_efficiency(appInfo, events, 'createdDate', 'sentDate'),
-                "flowEfficiencyCreated2Canceled": count_flow_efficiency(appInfo, events, 'createdDate', 'canceledDate'),
                 "flowEfficiencySubmitted2VerdictGiven": count_flow_efficiency(appInfo, events, 'submittedDate', 'verdictGivenDate')
             }
 

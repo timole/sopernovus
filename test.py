@@ -142,10 +142,6 @@ class TestUsersSummary(unittest.TestCase):
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
         self.users = users.summarize_users(self.df)
 
-        # print apps once for debugging
-        print "Summary of users based on test data:"
-        print self.users
-
     def test_number_of_users(self):
         self.assertEqual(len(self.users), 6)
 
