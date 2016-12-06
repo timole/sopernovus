@@ -84,6 +84,7 @@ def parse_application_summary(applicationId, appInfo, events, uniqueActions):
                 "nCreateDocs": len(find_events_by_action(events, 'create-doc')),
                 "nUploadAttachments": len(find_events_by_action(events, 'upload-attachment')),
                 "isApplicantLastNameFilled": len(find_events_by_action_and_target(events, 'update-doc', 'henkilo.henkilotiedot.sukunimi')) > 0,
+                "isArchitectCompetenceFilled": len(find_events_by_action_and_target(events, 'update-doc', 'patevyys.valmistumisvuosi')) > 0,
                 "isSubmitted": len(find_events_by_action(events, 'submit-application')) > 0,
                 "hasVerdict": len(find_events_by_action(events, 'give-verdict')) > 0,
                 "isCancelled": len(find_events_by_action(events, 'cancel-application')) > 0 or 

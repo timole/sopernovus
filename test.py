@@ -38,7 +38,7 @@ class TestApplicationSummary(unittest.TestCase):
     def test_number_of_events(self):
         apps = self.apps
 
-        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 137)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 138)
         self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 81)
 
 
@@ -68,10 +68,13 @@ class TestApplicationSummary(unittest.TestCase):
 
     def test_applicant_surname_filled(self):
         apps = self.apps
-
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['isApplicantLastNameFilled'].item(), True)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['nUploadAttachments'].item(), False)
 
+    def test_architect_competence_filled(self):
+        apps = self.apps
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['isArchitectCompetenceFilled'].item(), True)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['isArchitectCompetenceFilled'].item(), False)
 
     def test_count_session_length(self):
         apps = self.apps
