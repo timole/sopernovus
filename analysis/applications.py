@@ -20,6 +20,7 @@ def summarize_applications(df, odf, predictiveMode):
     numberOfApplications = df["applicationId"].nunique()
 
     uniqueActions = df["action"].unique()
+    uniqueUploadAttachmentTargets = df[df["action"] == "upload-attachment"].target.unique()
     
     logger.info("Analyzing {} events with {} unique actions".format(len(df), len(uniqueActions)))
 
@@ -42,7 +43,7 @@ def summarize_applications(df, odf, predictiveMode):
                 appEvents = None
 
         if appEvents is not None:
-            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), appEvents, uniqueActions)
+            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), appEvents, uniqueActions, uniqueUploadAttachmentTargets)
 
             if summary is None:
                 summary = pd.DataFrame(app, index = [0])
@@ -60,7 +61,7 @@ def summarize_applications(df, odf, predictiveMode):
 
     return summary
 
-def parse_application_summary(applicationId, appInfo, events, uniqueActions):
+def parse_application_summary(applicationId, appInfo, events, uniqueActions, uniqueUploadAttachmentTargets):
     app = {    "applicationId": applicationId, 
                 "events": len(events),
                 "userIds": find_unique_users_by_application(events),
@@ -98,12 +99,20 @@ def parse_application_summary(applicationId, appInfo, events, uniqueActions):
             }
 
 #    include_number_of_unique_actions(app, events, uniqueActions)
+    include_number_of_attachment_uploads(app, events, uniqueUploadAttachmentTargets)
+    
     return app
 
 def include_number_of_unique_actions(app, events, uniqueActions):
     for action in uniqueActions:
         fieldName = "n-" + action
         app[fieldName] = len(find_events_by_action(events, action))
+
+def include_number_of_attachment_uploads(app, events, uniqueUploadAttachmentTargets):
+    action = "upload-attachment"
+    for target in uniqueUploadAttachmentTargets:
+        fieldName = "n-" + action + "-" + str(target)
+        app[fieldName] = len(find_events_by_action_and_target(events, action, target))
 
 def get_role_user_id(events, role, index):
     vc = find_userId_value_counts_by_role(events, role)

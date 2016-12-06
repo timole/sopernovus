@@ -66,6 +66,12 @@ class TestApplicationSummary(unittest.TestCase):
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['nUploadAttachments'].item(), 1)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['nUploadAttachments'].item(), 0)
 
+    def test_number_of_upload_attachments_count(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['n-upload-attachment-asemapiirros'].item(), 1)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-101']['n-upload-attachment-asemapiirros'].item(), 0)
+
     def test_applicant_surname_filled(self):
         apps = self.apps
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['isApplicantLastNameFilled'].item(), True)
