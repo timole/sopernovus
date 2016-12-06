@@ -1,9 +1,9 @@
 import unittest
 
-import data_helper
-import utils
-import analysis
-import user_analysis
+from utils import utils
+from utils import data_helper
+from analysis import users
+from analysis import applications
 import pdb
 import logging
 
@@ -17,7 +17,7 @@ class TestApplicationSummary(unittest.TestCase):
         #TODO relative path to something better?
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
         self.odf = data_helper.import_operative_data("data/" + _OPERATIVE_TEST_DATA_FILE)
-        self.apps = analysis.summarize_applications(self.df, self.odf)
+        self.apps = applications.summarize_applications(self.df, self.odf)
 
         # print apps once for debugging
         print "Application summary based on test data:"
@@ -121,7 +121,7 @@ class TestUsersSummary(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
-        self.users = user_analysis.summarize_users(self.df)
+        self.users = users.summarize_users(self.df)
 
         # print apps once for debugging
         print "Summary of users based on test data:"
