@@ -53,7 +53,7 @@ def summarize_applications(df, odf):
 def parse_application_summary(applicationId, appInfo, events, uniqueActions):
     app = {    "applicationId": applicationId, 
                 "events": len(events),
-				"userIds": find_unique_users_by_application(events),
+                "userIds": find_unique_users_by_application(events),
                 "applicants": find_unique_users_by_application_and_role(events, 'applicant'),
                 "applicantId": get_role_user_id(events, 'applicant', 0),
                 "applicantId2": get_role_user_id(events, 'applicant', 1),
@@ -123,7 +123,7 @@ def get_role_user_ids(events, role):
     return val
 
 def find_unique_users_by_application(events):
-	return events.userId.nunique()
+    return events.userId.nunique()
 
 def find_unique_users_by_application_and_role(events, role):
     result = events[events['role'] == role]

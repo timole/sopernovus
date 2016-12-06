@@ -10,7 +10,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib, datetime
 
-import utils, data_helper, analysis, user_analysis
+from utils import utils
+from utils import data_helper
+from analysis import users
+from analysis import applications
 
 def parse_args():
     parser = argparse.ArgumentParser(description='SOPERNOVUS analysator')
@@ -33,7 +36,7 @@ def create_application_summary(outputFileName):
 
     # exported to global scope for debugging purposes
     global appsSummary
-    appsSummary =  analysis.summarize_applications(df, odf)
+    appsSummary =  applications.summarize_applications(df, odf)
 
     logger.info("N of applications = {}".format(len(appsSummary)))
     print(appsSummary)
@@ -48,7 +51,7 @@ def create_user_summary(outputFileName):
 
     # exported to global scope for debugging purposes
     global usersSummary
-    usersSummary =  user_analysis.summarize_users(df)
+    usersSummary =  users.summarize_users(df)
 
     logger.info("N of users = {}".format(len(usersSummary)))
     print(usersSummary)
@@ -82,7 +85,7 @@ def main():
     outputUsersFileName = args['output_file_users']
     predictionOutputFileName = args['output_file_applications_prediction']
 
-    utils.log_config()    
+    utils.log_config()
     logger = logging.getLogger(__name__)
 
     startTime = datetime.datetime.now()
