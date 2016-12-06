@@ -7,8 +7,7 @@ import argparse
 import numpy as np
 import pandas as pd
 
-import matplotlib.pyplot as plt
-import matplotlib, datetime
+import datetime
 
 from utils import utils
 from utils import data_helper
@@ -36,7 +35,7 @@ def create_application_summary(outputFileName):
 
     # exported to global scope for debugging purposes
     global appsSummary
-    appsSummary =  applications.summarize_applications(df, odf)
+    appsSummary =  applications.summarize_applications(df, odf, false)
 
     logger.info("N of applications = {}".format(len(appsSummary)))
     print(appsSummary)

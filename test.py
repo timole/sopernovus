@@ -6,6 +6,8 @@ from analysis import users
 from analysis import applications
 import pdb
 import logging
+import numpy as np
+import pandas as pd
 
 _TEST_DATA_FILE = "lupapiste-usage-test.csv"
 _OPERATIVE_TEST_DATA_FILE = "lupapiste-operative-test.csv"
@@ -14,14 +16,11 @@ class TestApplicationSummary(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
+        pd.set_option('display.width', 240)
         #TODO relative path to something better?
         self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
         self.odf = data_helper.import_operative_data("data/" + _OPERATIVE_TEST_DATA_FILE)
-        self.apps = applications.summarize_applications(self.df, self.odf)
-
-        # print apps once for debugging
-        print "Application summary based on test data:"
-        print self.apps
+        self.apps = applications.summarize_applications(self.df, self.odf, False)
 
     def test_number_of_applications(self):
         self.assertEqual(len(self.apps), 5)
@@ -40,7 +39,7 @@ class TestApplicationSummary(unittest.TestCase):
         apps = self.apps
 
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['events'].item(), 136)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 78)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['events'].item(), 81)
 
 
     def test_number_of_comments(self):
@@ -48,12 +47,12 @@ class TestApplicationSummary(unittest.TestCase):
 
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['comments'].item(), 0)
         self.assertEqual(apps[apps['applicationId'] == 'LP-101']['comments'].item(), 0)
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['comments'].item(), 5)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['comments'].item(), 7)
 
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['commentsApplicant'].item(), 0)
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['commentsAuthority'].item(), 0)
         
-        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['commentsApplicant'].item(), 2)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['commentsApplicant'].item(), 4)
         self.assertEqual(apps[apps['applicationId'] == 'LP-102']['commentsAuthority'].item(), 3)
 
     def test_number_of_update_docs(self):
@@ -115,6 +114,26 @@ class TestApplicationSummary(unittest.TestCase):
         apps = self.apps
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['authorityId'].item(), 102986)
         self.assertEqual(apps[apps['applicationId'] == 'LP-100']['authorities'].item(), 1)
+
+class TestPredictiveApplicationSummary(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        pd.set_option('display.width', 240)
+        #TODO relative path to something better?
+        self.df = data_helper.import_data("data/" + _TEST_DATA_FILE)
+        self.odf = data_helper.import_operative_data("data/" + _OPERATIVE_TEST_DATA_FILE)
+        self.apps = applications.summarize_applications(self.df, self.odf, True)
+
+    def test_number_of_applications(self):
+        self.assertEqual(len(self.apps), 2)
+        
+    def test_number_of_comments(self):
+        apps = self.apps
+
+        self.assertEqual(apps[apps['applicationId'] == 'LP-100']['comments'].item(), 0)
+        self.assertEqual(apps[apps['applicationId'] == 'LP-102']['comments'].item(), 5)
+
 
 class TestUsersSummary(unittest.TestCase):
 

@@ -220,6 +220,9 @@ datetime;applicationId;isInfoRequest;operation;municipalityId;userId;role;action
 2015-12-08 12:34:27.835;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;mark-seen;comments
 2015-12-08 12:34:30.749;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;convert-to-application;
 2015-12-08 12:36:16.442;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;mark-seen;comments
+2015-12-08 12:36:16.443;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;submit-application;
+2015-12-08 12:36:16.444;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;add-comment;application
+2015-12-08 12:36:16.445;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;add-comment;application
 2015-12-14 18:55:04.632;LP-102;0;muu-maisema-toimenpide;139;109387;applicant;mark-seen;comments
 2015-12-30 11:38:42.536;LP-102;0;muu-maisema-toimenpide;139;101346;authority;mark-seen;comments
 2015-12-30 11:38:51.664;LP-102;0;muu-maisema-toimenpide;139;101346;authority;cancel-application-authority;

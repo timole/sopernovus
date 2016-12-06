@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 SESSION_THRESHOLD_IN_MINUTES = 15
 
-def summarize_applications(df, odf):
+def summarize_applications(df, odf, predictiveMode):
     """ Create a summary of the applications as a table. Presumes events are in datetime order
           * Count number of comments for different roles
     """
@@ -32,12 +32,21 @@ def summarize_applications(df, odf):
             logger.debug("No operative data available for application (infoRequest) " + applicationId)
             continue
 
-        app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), df[df['applicationId'] == applicationId], uniqueActions)
+        appEvents = df[df['applicationId'] == applicationId]
+        if predictiveMode:
+            submitEvents = appEvents[appEvents.action == "submit-application"]
+            if len(submitEvents) > 0:
+                appEvents = appEvents.loc[:submitEvents.index[0]]
+            else:
+                appEvents = None
 
-        if summary is None:
-            summary = pd.DataFrame(app, index = [0])
-        else:
-            summary.loc[len(summary)] = app
+        if appEvents is not None:
+            app = parse_application_summary(applicationId, appInfo.iloc[0].to_dict(), appEvents, uniqueActions)
+
+            if summary is None:
+                summary = pd.DataFrame(app, index = [0])
+            else:
+                summary.loc[len(summary)] = app
 
         if n % 1000 == 0:
             logger.info("Processed {}%".format( round( float(n) / nTotal * 100, 1)))
