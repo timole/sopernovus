@@ -9,11 +9,11 @@
 
 CSV input file is a mandatory parameter:
 
-`python src/main.py --input-file INPUT_FILE --output-file OUTPUT_FILE`
+`python main.py --input-file-usage usage.csv --input-file-operative operative.csv --output-file-applications summary-applications.csv --output-file-users summary-users.csv --output-file-applications-prediction prediction-applications.csv`
 
 
 ###Testing:###
 
-`python src/analysis_test.py`
+`python test.py`
 
 CI is at https://circleci.com/gh/timole/sopernovus
